@@ -106,20 +106,21 @@ Bitbucket pipeline configuration to build, test, and deploy the Flask applicatio
    docker compose up
 
 ### Endpoints
-/get/messages/<account_id>
+1. ** /get/messages/<account_id>
+   ```bash
+     example: curl http://127.0.0.1:5000/get/messages/123
+
+2. ** Returns all the messages with the sender and receiver details pertaining to the provided account id.
+   /create
+    ```bash
+   example: curl -X POST http://127.0.0.1:5000/create -H "Content-Type: application/json" -d '{"account_id": "3", "sender_number": "555-123451", 
+   "receiver_number": "555-567861"}'
+
+3. ** POST call which saves the message with the sender and receiver details.
+   /search
+  Search for keys using the following filters:
+  /search?sender_number="1,2"
+  /search?receiver_number="1,2"
 ```bash
-example: curl http://127.0.0.1:5000/get/messages/123
-
-Returns all the messages with the sender and receiver details pertaining to the provided account id.
-/create
-```bash
-example: curl -X POST http://127.0.0.1:5000/create -H "Content-Type: application/json" -d '{"account_id": "3", "sender_number": "555-123451", "receiver_number": "555-567861"}'
-
-POST call which saves the message with the sender and receiver details.
-/search
-
-Search for keys using the following filters:
-/search?sender_number="1,2"
-/search?receiver_number="1,2"
 example: curl http://127.0.0.1:5000/search?sender_number=555-1234
    
