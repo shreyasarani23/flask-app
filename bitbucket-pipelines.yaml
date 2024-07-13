@@ -1,0 +1,43 @@
+image: python:3.9
+
+pipelines:
+  default:
+    - step:
+        name: Build Python Application
+        caches:
+          - pip
+        script:
+          - python -m venv venv
+          - . venv/bin/activate
+          - pip install -r requirements.txt
+          - python setup.py install
+    - step:
+        name: Run Test Cases
+        caches:
+          - pip
+        script:
+          - . venv/bin/activate
+          - pip install -r requirements-dev.txt
+          - pytest tests/
+    - step:
+        name: Build and Push Docker Image
+        services:
+          - docker
+        script:
+          - docker build -t gcr.io/$GCP_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT .
+          - echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ${HOME}/gcloud-service-key.json
+          - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+          - gcloud auth configure-docker
+          - docker push gcr.io/$GCP_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT
+    - step:
+        name: Deploy to Kubernetes
+        script:
+          - echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ${HOME}/gcloud-service-key.json
+          - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+          - gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE --project $GCP_PROJECT_ID
+          - kubectl set image deployment/$K8S_DEPLOYMENT_NAME $K8S_CONTAINER_NAME=gcr.io/$GCP_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT
+definitions:
+  services:
+    docker:
+      memory: 2048
+
