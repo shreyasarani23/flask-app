@@ -37,8 +37,6 @@ Horizontal Pod Autoscaler spec to handle scaling of the Flask application.
 #### `kubernetes/network-policy.yaml`
 Network policy spec to secure the communication within the Kubernetes cluster.
 
-#### `kubernetes/service-account.yaml`
-Service account with appropriate IAM role and policies attached for security.
 
 #### `kubernetes/prometheus-monitoring.yaml`
 Spec to monitor the service with Prometheus and alert manager.
@@ -54,14 +52,19 @@ Storage spec to define persistent volume claims for the database.
 
 ### 4. Terraform
 
-#### `terraform/main.tf`
-Terraform configuration to set up a Kubernetes cluster on AWS.
+#### `terraform/cluster.tf`
+Terraform configuration to set up a Kubernetes cluster on GCP.
 
 #### `terraform/variables.tf`
 Defines the variables used in the Terraform configuration.
 
-#### `terraform/outputs.tf`
-Defines the outputs of the Terraform configuration.
+### `terraform/vpc.tf`
+Terraform configuration to create VPC and subnet
+
+### `terraform/provider.tf`
+Provider plugin configuration 
+
+
 
 ### 5. CI/CD
 
@@ -101,4 +104,22 @@ Bitbucket pipeline configuration to build, test, and deploy the Flask applicatio
    ```bash
    docker volume create mysql_data
    docker compose up
+
+### Endpoints
+/get/messages/<account_id>
+```bash
+example: curl http://127.0.0.1:5000/get/messages/123
+
+Returns all the messages with the sender and receiver details pertaining to the provided account id.
+/create
+```bash
+example: curl -X POST http://127.0.0.1:5000/create -H "Content-Type: application/json" -d '{"account_id": "3", "sender_number": "555-123451", "receiver_number": "555-567861"}'
+
+POST call which saves the message with the sender and receiver details.
+/search
+
+Search for keys using the following filters:
+/search?sender_number="1,2"
+/search?receiver_number="1,2"
+example: curl http://127.0.0.1:5000/search?sender_number=555-1234
    
