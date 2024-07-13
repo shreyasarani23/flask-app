@@ -14,8 +14,6 @@ This is the main application file for the HTTP API service. It includes endpoint
 Lists all the dependencies required to run the Flask application.
 
 
-#### `tests/test_app.py`
-Contains the test cases for the application to ensure proper test coverage.
 
 ### 2. Docker
 
