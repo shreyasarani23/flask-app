@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+
+    scrape_configs:
+      - job_name: 'flask-app'
+        static_configs:
+          - targets: ['flask-app.web.svc.cluster.local:5000']
+  
+    rule_files:
+      - /etc/prometheus/alert.rules
+
+  alert.rules: |
+    groups:
+      - name: flask-app-rules
+        rules:
+          - alert: HighErrorRate
+            expr: rate(http_requests_total{status_code=~"5.."}[5m]) > 0.05
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "High error rate for Flask app"
+              description: "The Flask application has a high error rate over the last 5 minutes."
+          
+
+          - alert: HighThroughput
+            expr: rate(http_requests_total[1m]) > 100
+            for: 5m
+            labels:
+              severity: info
+            annotations:
+              summary: "High throughput for Flask app"
+              description: "The Flask application has high throughput over the last 5 minutes."

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.gcp.kubernetes.io/pre-shared-cert: <cert-name>
+    ingress.kubernetes.io/ssl-cert: <cert-name>
+    kubernetes.io/ingress.global-static-ip-name: <public-ip>
+    kubernetes.io/ingress.allow-http: "false"
+  name: flask-ingress
+  namespace: web
+spec:
+  rules:
+  - host: <your-domain>
+    http:
+      paths:
+      - backend:
+          service:
+            name: flask-app
+            port:
+              number: 80
+        path: /
+        pathType: prefix
