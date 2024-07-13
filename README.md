@@ -100,7 +100,7 @@ Bitbucket pipeline configuration to build, test, and deploy the Flask applicatio
 
 ### Steps to run as a docker
 
-4. ** Create 
+1. ** Create volume and run docker compose up
    ```bash
    docker volume create mysql_data
    docker compose up
