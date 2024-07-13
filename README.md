@@ -105,6 +105,10 @@ Bitbucket pipeline configuration to build, test, and deploy the Flask applicatio
    docker volume create mysql_data
    docker compose up
 
+### Steps to run on kubernetes cluster
+
+Create a kubernetes cluster and apply the files kubernetes-manifest directory
+
 ### Endpoints
 1. ** /get/messages/<account_id>
    ```bash
