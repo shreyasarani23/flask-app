@@ -2,31 +2,6 @@
 
 This document explains the components of the HTTP API service for serving messages, how to set up the Python application, how to run it, and what each component does.
 
-## Directory Structure
-
-├── Dockerfile
-├── README.md
-├── app.py
-├── bitbucket-pipelines.yml
-├── kubernetes
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   ├── ingress.yaml
-│   ├── hpa.yaml
-│   ├── network-policy.yaml
-│   ├── service-account.yaml
-│   ├── prometheus-monitoring.yaml
-│   ├── fluentd.yaml
-│   ├── statefulset-db.yaml
-│   ├── storage.yaml
-├── requirements.txt
-├── setup.py
-├── tests
-│   ├── test_app.py
-└── terraform
-    ├── main.tf
-    ├── variables.tf
-    ├── outputs.tf
 
 ## Components
 
@@ -98,23 +73,34 @@ Bitbucket pipeline configuration to build, test, and deploy the Flask applicatio
 ## Setup and Run the Application
 
 ### Prerequisites
-- Python 3.8+
+- Python 3.9
 - Docker
 - Kubernetes cluster
 - Terraform
 - Bitbucket account
 - GCP/AWS
+- Mysql
 
-### Steps
+### Steps to run locally
 
 1. **Clone the repository**
 
    ```bash
    git clone <repository-url>
    cd <repository-directory>
+2. ** Set virtual Environment
+   ```bash
    python -m venv venv
    source venv/bin/activate
+3. ** Install the required dependencies
+   ```bash
    pip install -r requirements.txt
    python app.py
-   docker build -t flask-app .
-   docker run -p 5000:5000 flask-app```
+
+### Steps to run as a docker
+
+4. ** Create 
+   ```bash
+   docker volume create mysql_data
+   docker compose up
+   
